@@ -5,7 +5,7 @@ from app.api.v1.users import router as users_router
 from app.core.settings import settings
 from app.db.base import Base
 from app.db.database import engine
-
+from app.api.v1.resume import router as resume_router
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
@@ -19,6 +19,7 @@ app = FastAPI(
 # Register API routers
 app.include_router(auth_router)
 app.include_router(users_router)
+app.include_router(resume_router)
 
 
 @app.get("/", tags=["Home"])
