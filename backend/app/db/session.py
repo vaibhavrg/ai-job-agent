@@ -1,8 +1,11 @@
-from app.db.database import Base
-from app.db.database import engine
-
-from app.models.user import User
+from app.db.database import SessionLocal
 
 
-def create_database():
-    Base.metadata.create_all(bind=engine)
+def get_db():
+    db = SessionLocal()
+
+    try:
+        yield db
+
+    finally:
+        db.close()

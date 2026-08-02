@@ -1,9 +1,11 @@
+from datetime import datetime
+
 from sqlalchemy import Boolean
-from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import Integer
 from sqlalchemy import String
-from sqlalchemy.sql import func
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
 
 from app.db.database import Base
 
@@ -11,14 +13,33 @@ from app.db.database import Base
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        index=True,
+    )
 
-    full_name = Column(String(200), nullable=False)
+    full_name: Mapped[str] = mapped_column(
+        String(150),
+        nullable=False,
+    )
 
-    email = Column(String(255), unique=True, nullable=False, index=True)
+    email: Mapped[str] = mapped_column(
+        String(255),
+        unique=True,
+        index=True,
+    )
 
-    hashed_password = Column(String(255), nullable=False)
+    hashed_password: Mapped[str] = mapped_column(
+        String(255),
+    )
 
-    is_active = Column(Boolean, default=True)
+    is_active: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+    )
 
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+    )
