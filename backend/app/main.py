@@ -1,27 +1,37 @@
 from fastapi import FastAPI
 
+from app.api.v1.auth import router as auth_router
+from app.api.v1.users import router as users_router
 from app.core.settings import settings
 from app.db.base import Base
 from app.db.database import engine
 
+# Create database tables
 Base.metadata.create_all(bind=engine)
 
+# Create FastAPI app
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
+    description="AI Job Agent Backend API",
 )
 
+# Register API routers
+app.include_router(auth_router)
+app.include_router(users_router)
 
-@app.get("/")
+
+@app.get("/", tags=["Home"])
 def home():
     return {
-        "message": "AI Job Agent API",
+        "message": "Welcome to AI Job Agent API",
         "version": settings.APP_VERSION,
     }
 
 
-@app.get("/health")
+@app.get("/health", tags=["Health"])
 def health():
     return {
         "status": "healthy",
+        "service": settings.APP_NAME,
     }
