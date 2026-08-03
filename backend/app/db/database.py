@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 from app.core.settings import settings
 
@@ -19,3 +18,15 @@ SessionLocal = sessionmaker(
     autocommit=False,
     bind=engine,
 )
+
+
+def get_db():
+    """
+    FastAPI database dependency.
+    Creates a new database session for each request and closes it afterwards.
+    """
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
